@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Log Data Analysis Dashboard</title>
+
+  <style>
+    * {
+      margin: 0;
+    }
+
+
+    h1 {
+      color: #fff;
+      margin-top: 60px;
+      line-height: 1em;
+    }
+
+    h1 span {
+      background: red;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      margin-left: 20px;
+    }
+
+    svg {
+      position: absolute;
+      top: 55%;
+      bottom: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    text {
+      font-size: 18px;
+      fill: #111;
+      font-weight: bold;
+    }
+
+    .container {
+      display: flex;
+      margin-top: 2%;
+      margin-left: 30%;
+    }
+  </style>
+</head>
+
+<body>
+  
+  <h1 style="font-size:60px; color: #227c8d; margin-top: 80px; margin-left: 30%;">Kafka Stream Analysis</h1>
+
+  <div class="container">
+
+    <div id="chart_div"  style="width: 900px; height: 500px;margin-top: 2%;"></div>
+    
+    <div id="pichart" style="width: 900px; height: 550px; "></div>
+  </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- <script src="socket.io"></script> -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        var socket = io();
+        rows = []
+        ticks = []
+        socket.on('message', function (array_count) {
+          
+          
+          google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Type', 'Frequency'],
+          ['INFO',     array_count[0]],
+          ['ERROR',       array_count[1]],
+          ['WARN',   array_count[2]],
+          ['DEBUG',  array_count[3]]
+         
+        ]);
+
+        var options = {
+          // title: 'Log Type Percetage',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('pichart'));
+
+        chart.draw(data, options);
+      }
+
+
+      
+      google.charts.load('current', {packages: ['corechart', 'line']});
+      google.charts.setOnLoadCallback(drawCrosshairs);
+      
+
+      
+      function drawCrosshairs() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'X');
+        data.addColumn('number', 'INFO');
+        data.addColumn('number', 'ERROR');
+        data.addColumn('number', 'WARN');
+        data.addColumn('number', 'DEBUG');
+
+        // data.addRows([
+        //   [0, 0, 0],    [1, 10, 5],   [2, 23, 15],  [3, 17, 9],   [4, 18, 10],  [5, 9, 5],
+        //   [6, 11, 3],   [7, 27, 19],  [8, 33, 25],  [9, 40, 32],  [10, 32, 24], [11, 35, 27],
+        //   [12, 30, 22], [13, 40, 32], [14, 42, 34], [15, 47, 39], [16, 44, 36], [17, 48, 40],
+        //   [18, 52, 44], [19, 54, 46], [20, 42, 34], [21, 55, 47], [22, 56, 48], [23, 57, 49],
+        //   [24, 60, 52], [25, 50, 42], [26, 52, 44], [27, 51, 43], [28, 49, 41], [29, 53, 45],
+        //   [30, 55, 47], [31, 60, 52], [32, 61, 53], [33, 59, 51], [34, 62, 54], [35, 65, 57],
+        //   [36, 62, 54], [37, 58, 50], [38, 55, 47], [39, 61, 53], [40, 64, 56], [41, 65, 57],
+        //   [42, 63, 55], [43, 66, 58], [44, 67, 59], [45, 69, 61], [46, 69, 61], [47, 70, 62],
+        //   [48, 72, 64], [49, 68, 60], [50, 66, 58], [51, 65, 57], [52, 67, 59], [53, 70, 62],
+        //   [54, 71, 63], [55, 72, 64], [56, 73, 65], [57, 75, 67], [58, 70, 62], [59, 68, 60],
+        //   [60, 64, 56], [61, 60, 52], [62, 65, 57], [63, 67, 59], [64, 68, 60], [65, 69, 61],
+        //   [66, 70, 62], [67, 72, 64], [68, 75, 67], [69, 80, 72]
+        // ]);
+      
+   
+        
+        rows.push([array_count[5],array_count[0],array_count[1],array_count[2],array_count[3]])
+        ticks.push([array_count[5],array_count[4]])
+        data.addRows(rows);
+
+        var options = {
+          xaxis: {
+            ticks: ticks
+          },
+          hAxis: {
+            title: 'Time (in seconds)'
+          },
+          vAxis: {
+            title: 'Count',
+          },
+
+          //blue #4065c5 - info
+          // error #cb4727 - red
+          // warn #f19e38 - yellow
+          // green #449431 - debug
+
+
+          colors: ['#4065c5', '#cb4727','#f19e38','#449431'],
+          crosshair: {
+            color: '#000',
+            trigger: 'selection'
+          }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+        // chart.setSelection([{row: 38, column: 1}]);
+
+      }
+
+      });
+    });
+  </script>
+</body>
+
+</html>

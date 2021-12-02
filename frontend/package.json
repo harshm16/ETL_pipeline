@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "express": "^4.16.3",
+    "kafka-node": "^2.4.1",
+    "kafkajs": "^1.15.0",
+    "nodemon": "^2.0.15",
+    "socket.io": "^2.0.4",
+    "websocket": "^1.0.34"
+  }
+}
