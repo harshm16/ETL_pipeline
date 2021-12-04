@@ -27,16 +27,18 @@ http.listen(port, function() {
 
 async function consume() {
     const kafka = new Kafka({
-        clientId: "dthree",
-        brokers: ["127.0.0.1:9092"],
+        // clientId: "dthree",
+        // brokers: ["127.0.0.1:9092"],
+        brokers: ["b-3.cs441-kafka.cxgc19.c10.kafka.us-west-2.amazonaws.com:9092","b-2.cs441-kafka.cxgc19.c10.kafka.us-west-2.amazonaws.com:9092","b-1.cs441-kafka.cxgc19.c10.kafka.us-west-2.amazonaws.com:9092"],
     });
 
-    const consumer = kafka.consumer({ groupId: "dthree" });
+    const consumer = kafka.consumer({ groupId: "rand" });
     await consumer.connect();
     console.log("Consumer connected");
 
     await consumer.subscribe({
-        topic: "randlogs",
+        topic: "cs441",
+        // topic: "randlo",
         fromBeginning: true,
     });
 
@@ -89,6 +91,51 @@ async function consume() {
         io.emit('message', array_count);
         },
     });
+
+
+
+
+    //spark 
+
+    
+    const consumer_spark = kafka.consumer({ groupId: "new" });
+    await consumer_spark.connect();
+    console.log("Consumer connected");
+
+    await consumer_spark.subscribe({
+        // topic: "cs441",
+        topic: "sparkAnalytics",
+        fromBeginning: true,
+    });
+
+    var counter = 0
+    await consumer_spark.run({
+        eachMessage: async ({ topic, partition, message }) => {
+            // 1. topic
+            // 2. partition
+            // 3. message
+
+            var stream_array = message.value.toString().split("'");
+      
+            spark_array = []
+            if (stream_array[13] == 'ERROR'){
+    
+                var start_time =  Date.parse(stream_array[5]);
+                var end_time =  Date.parse(stream_array[9]);
+                var type = stream_array[13];
+                var count = stream_array[16].split('}')[0].split(' ')[1];
+             
+                counter = counter + 1
+                spark_array = [start_time,end_time,type,count,counter]
+        
+                console.log(spark_array)
+                io.emit('sparkresult', spark_array);
+            }
+
+        },
+    });
+
+
 }
 
 consume();
