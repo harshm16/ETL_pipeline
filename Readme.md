@@ -16,7 +16,7 @@ This was our course project for CS 441 taken under the guidance of Prof. Mark Gr
 ## Overview:
 
 In this project we have created a streaming data pipeline using various cloud technologies alongside implementing an actor-model such as Akka that helped us ingesting the log file which is generated in real time. This file is delivered via an event-based service called Kafka and sent to Spark for further processing. In the Spark pipeline aggregations are performed for the log type `WARN` and `ERROR` that sends this information to stakeholders using the `AWS Email Service`. This entire pipelined output is plotted in real time which uses data from the kafka stream.
-Detailed end to end implementation along with setups of each of the AWS services used is attached in this [video](https://www.youtube.com/playlist?list=PL4hC71cd7Y0uuEMHhh7SLTFA1xEjjdvj1).
+Detailed end to end implementation along with setups of each of the AWS services used is attached in this [playlist](https://www.youtube.com/playlist?list=PL4hC71cd7Y0uuEMHhh7SLTFA1xEjjdvj1).
 
 ### Task 1:
 **_Elastic BeanStalk_**
