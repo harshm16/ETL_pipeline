@@ -38,6 +38,6 @@ Consumer:
 
 `bin/kafka-console-consumer.sh --bootstrap-server BootstrapBrokerString --topic TopicName --from-beginning`
 
-###Key Takeaway/Conclusion:
+### Key Takeaway/Conclusion:
 
 Now that we can use kafka as a Managed Service on AWS, it helps us focus more on processing layer to consume data from MSK and further provide it to the visualization layers.
