@@ -19,14 +19,14 @@ In this project we have created a streaming data pipeline using various cloud te
 Detailed end to end implementation along with setups of each of the AWS services used is attached in this [playlist](https://www.youtube.com/playlist?list=PL4hC71cd7Y0uuEMHhh7SLTFA1xEjjdvj1).
 
 ### Task 1:
-**_Elastic BeanStalk_**
+**Deploying Log generating application over EBS**
 
-We use this repository to make it deployable as a web application over AWS Beanstalk. Detailed implementation & steps to execute is present in [EBS]().
+We deploy multiple instances of log generating application over AWS Elastic Beanstalk (EBS). Detailed implementation & steps to execute are present in [LogFileGenerator](https://github.com/stoic-devv/LogFileGenerator).
 
 ### Task 2:
-**_File Watcher_**
+**Real-time file monitoring**
 
-Monitor changes made to the file over given periodic intervals. As soon as new changes are made to file next actor is notified. Coding logic and explanation of the file watcher is provided in [FileWatcher]().
+In this we monitor and extract real-time changes to the files present in a specified directory using Akka Actors. Here is the code and detailed documentation [FileWatcher](https://github.com/parth-d/FileWatcherScala-CS441-).
 
 ### Task 3:
 **_Amazon Managed Streaming Kafka:_**
